@@ -1,45 +1,61 @@
 package pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
 import org.openqa.selenium.support.FindBy;
 import org.testng.Reporter;
-
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class HomePage {
-    WebDriver driver;
+public class HomePage extends BasePage {
+
     public HomePage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    @FindBy(id="keywords")
+    @FindBy(id = "keywords")
     WebElement txtSearch_HomePage;
 
-    @FindBy(xpath="//*[contains(@id,'btn-success')]")
+    @FindBy(xpath = "//*[contains(@class,'btn-success')]")
     WebElement btnSearch;
 
-    @FindBy(xpath="//*[contains(@class,'product_')]//a")
-    ArrayList<WebElement> Search_List;
+    @FindAll(@FindBy(xpath = "//*[contains(@id,'product_')]//a"))
+    List<WebElement> Search_List;
 
+    public Boolean getResultsWithSearchText(String SearchForProduct){
 
-    public void VerifySearchResults(String SearchForProduct){
-        txtSearch_HomePage.sendKeys(SearchForProduct);
-        btnSearch.click();
-        ArrayList<WebElement> Results = Search_List;
+        Boolean isResultsContainSearch = true;
+        WaitUntilElementIsVisibleBy("xpath", "//*[contains(@class,'search-results-title')]");
+        List<WebElement> Results = new ArrayList<>();
+        for (WebElement listItem : Search_List) {
+            Results.add(listItem);
+        }
         if(Results.size()!=0){
             for (WebElement result: Results) {
                 String hrefResult_Link = result.getAttribute("href").toLowerCase();
-                if(!(hrefResult_Link.contains(SearchForProduct))){
-                    Reporter.log("Results doesnt have the relevant search");
+                if(!(hrefResult_Link.contains(SearchForProduct.toLowerCase()))){
+                    isResultsContainSearch = false;
+                    break;
                 }
                 else{
-                    System.out.println(hrefResult_Link);
+                    isResultsContainSearch = true;
                 }
             }
         }
         else{
-            System.out.println("No Search results found for Product "+SearchForProduct);
+            isResultsContainSearch = false;
         }
+        return isResultsContainSearch;
+
+    }
+
+    public Boolean VerifySearchResults(String SearchForProduct){
+        txtSearch_HomePage.clear();
+        txtSearch_HomePage.sendKeys(SearchForProduct.toLowerCase());
+        btnSearch.click();
+        return getResultsWithSearchText(SearchForProduct);
     }
 }

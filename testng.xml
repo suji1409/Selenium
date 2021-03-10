@@ -8,13 +8,13 @@
 
     <test name="LoginTest">
         <classes>
-            <class name="tests.Spree_Login_Test"/>
+            <class name="tests.SpreeLoginTest"/>
         </classes>
     </test>
 
     <test name="SearchTest">
         <classes>
-            <class name="tests.Spree_SearchProduct_Test"/>
+            <class name="tests.SpreeSearchProductTest"/>
         </classes>
     </test>
 
