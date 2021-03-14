@@ -10,7 +10,7 @@
 
     <test name="LoginTest">
         <classes>
-            <class name="tests.SpreeSearchProductTest"/>
+            <class name="tests.SpreeShopByCategoryTest"/>
 
         </classes>
     </test>
