@@ -16,6 +16,7 @@ import org.testng.Reporter;
 import org.testng.annotations.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -23,12 +24,10 @@ public class BaseTest {
 
     public static WebDriver driver;
     public static WebDriverManager driverManager;
-    public static String FilePath=System.getProperty("user.dir")+"\\Screenshots\\";
+    public static String FilePath=System.getProperty("user.dir")+"/Screenshots/";
 
-
-    @BeforeSuite
+    @BeforeTest
     @Parameters({"browser_name", "App_Url"})
-
     public void Launch_App(String browser_name, String App_Url) {
 
         switch (browser_name.toLowerCase()) {
@@ -54,17 +53,24 @@ public class BaseTest {
     }
 
 
-    public static void takeSnapShot(String fileName) throws Exception{
+    public static void takeSnapShot(String fileName){
         TakesScreenshot scrShot =((TakesScreenshot)driver);
         File SrcFile=scrShot.getScreenshotAs(OutputType.FILE);
-        FilePath = FilePath+fileName+".png";
-        File DestFile=new File(FilePath);
-        FileUtils.copyFile(SrcFile, DestFile);
+        String NewFilePath = FilePath+fileName+".jpg";
+
+        File DestFile=new File(NewFilePath);
+        try {
+            FileUtils.copyFile(SrcFile, DestFile);
+            System.out.println(NewFilePath);
+        } catch (IOException e) {
+            Reporter.log("Failed while copying the Screenshot file"+NewFilePath);
+        }
         Reporter.log('<'+"img src=”+FilePath +'/>'");
     }
-        @AfterSuite
+        @AfterTest
         public void close_App(){
-            driver.quit();
+        driver.manage().deleteAllCookies();
+        driver.quit();
     }
 
 }

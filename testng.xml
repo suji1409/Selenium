@@ -1,6 +1,8 @@
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
 
-<suite name="Suite1" verbose="1" >
+
+<suite name="SpreeApplication" verbose="1" >
+
     <parameter name="browser_name" value="chrome" />
     <parameter name="App_Url" value="https://spree-vapasi.herokuapp.com/" />
     <parameter name="UserName" value="sujithalakshmi.sundar@gmail.com" />
@@ -8,14 +10,15 @@
 
     <test name="LoginTest">
         <classes>
-            <class name="tests.SpreeLoginTest"/>
+            <class name="tests.SpreeSearchProductTest"/>
+
         </classes>
     </test>
 
-    <test name="SearchTest">
-        <classes>
-            <class name="tests.SpreeSearchProductTest"/>
-        </classes>
-    </test>
+<!--    <test name="SearchTest">-->
+<!--        <classes>-->
+<!--            <class name="tests.SpreeSearchProductTest"/>-->
+<!--        </classes>-->
+<!--    </test>-->
 
 </suite>
